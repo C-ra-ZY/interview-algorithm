@@ -15,3 +15,5 @@ for (let index = 0; index < arr.length; index++) {
 	}
 }
 console.log(JSON.stringify(arr));
+
+//time O(n*n)

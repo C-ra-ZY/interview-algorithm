@@ -12,3 +12,6 @@ counter.forEach((e, index) => {
 });
 
 console.log(JSON.stringify(res));
+
+//time O(2n)
+//space O(2n)

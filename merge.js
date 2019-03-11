@@ -19,3 +19,5 @@ function merge(arr) {
 }
 
 console.log(JSON.stringify(merge(arr)));
+
+//time O(nlogn)

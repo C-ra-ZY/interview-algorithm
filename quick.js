@@ -14,3 +14,5 @@ function quickSort(arr) {
 }
 
 console.log(JSON.stringify(quickSort(arr)));
+
+//time O(nlogn)

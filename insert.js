@@ -16,3 +16,5 @@ function insert(arr, target) {
 res.shift();
 res.pop();
 console.log(JSON.stringify(res));
+
+//time O(n*n)

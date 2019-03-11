@@ -13,3 +13,6 @@ while (initGap >= 1) {
 	initGap -= 2;
 }
 console.log(JSON.stringify(arr));
+
+
+//time O(nlogn)
