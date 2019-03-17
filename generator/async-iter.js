@@ -10,7 +10,6 @@ async function* readLines(path) {
 			let toStoredChunk = chunk.slice(0, lineBreakIndex);
 			storedChunks.push(toStoredChunk);
 			size += toStoredChunk.length;
-			// let lineBuf = Buffer.concat(storedChunks, size);// returned a buffer with 0 size...weird
 			let lineBuf = Buffer.concat(storedChunks, size);
 			let remainChunk = chunk.slice(lineBreakIndex + 1);
 			storedChunks = [];
