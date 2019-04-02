@@ -1,50 +1,34 @@
 let arr = require("./originArr");
-arr.push(101);
-function heapSort(array) {
-	var heapSize = array.length,
-		temp;
+let swap = require("./swap");
 
-	for (var i = Math.floor(heapSize / 2) - 1; i >= 0; i--) {
-		heap(array, i, heapSize);
-	}
-
-	for (var j = heapSize - 1; j >= 1; j--) {
-		console.log(array,j);
-		temp = array[0];
-
-		array[0] = array[j];
-
-		array[j] = temp;
-
-		heap(array, 0, --heapSize);
-	}
-
-	return array;
-}
-
-function heap(arr, x, len) {
-	var l = 2 * x + 1,
-		r = 2 * x + 2,
-		largest = x,
-		temp;
-
-	if (l < len && arr[l] > arr[largest]) {
-		largest = l;
-	}
-
-	if (r < len && arr[r] > arr[largest]) {
-		largest = r;
-	}
-
-	if (largest != x) {
-		temp = arr[x];
-
-		arr[x] = arr[largest];
-
-		arr[largest] = temp;
-
-		heap(arr, largest, len);
+function heap(i) {
+	let leftIndex = 2 * i + 1;
+	let rightIndex = 2 * i + 2;
+	if (arr[i]) {
+		if (!arr[leftIndex]) {
+			return arr[i];
+		} else {
+			let left = heap(leftIndex);
+			let right = heap(rightIndex);
+			if (left > arr[i]) {
+				let [a, b] = swap(arr[i], left);
+				arr[i] = a;
+				arr[leftIndex] = b;
+			}
+			if (right > arr[i]) {
+				let [a, b] = swap(arr[i], right);
+				arr[i] = a;
+				arr[rightIndex] = b;
+			}
+			return arr[i];
+		}
+	} else {
+		return Number.NEGATIVE_INFINITY;
 	}
 }
-
-console.log(heapSort(arr));
+let res = [];
+do {
+	res.push(heap(0));
+	arr.shift();
+} while (arr.length);
+console.log(JSON.stringify(res));
