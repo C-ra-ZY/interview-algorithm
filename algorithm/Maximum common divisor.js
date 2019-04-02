@@ -15,8 +15,7 @@ function Euclidean(x, y) {
 	while (x * y) {
 		if (x > y) {
 			x %= y;
-		}
-		if (x < y) {
+		} else if (x < y) {
 			y %= x;
 		}
 	}
