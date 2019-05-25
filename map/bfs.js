@@ -2,6 +2,7 @@ class Vector {
 	constructor(name) {
 		this.name = name;
 		this.adjs = new Set();
+		this.searchedFrom = undefined;
 	}
 	addAdj(vector) {
 		if (vector instanceof Vector && vector.name != this.name && !this.adjs.has(vector)) {
@@ -18,26 +19,42 @@ class Vector {
 		return this.valueOf();
 	}
 }
-function bfsShortest(path = [], vectorTo) {
-	if (path.includes(vectorTo)) {
-		return path.slice(0, path.findIndex((e) => e == vectorTo) + 1);
-	}
-	let last = path[path.length - 1];
-	let secondLast = path.length > 1 ? path[path.length - 2] : null;
-	let { adjs } = last;
-	let paths = [...adjs]
-		.filter((adj) => {
-			return !path.includes(adj) && (!!secondLast ? ![...secondLast.adjs].includes(adj) : true);
-		})
-		.map((adj) => {
-			return bfsShortest([...path, adj], vectorTo);
-		})
-		.filter((e) => e && e.length);
-	let shortest = Math.min.apply(null, paths.map((e) => e.length)) || -1;
-	for (let sp of paths.filter((e) => e && e.length == shortest)) {
-		console.log(sp.map((e) => e.name).join("-"));
-		return sp;
-	}
+
+function bfsShortest(vectorFrom, vectorTo) {
+	vectorFrom.searchedFrom = undefined;
+	let searchedPool = new Set();
+	let toSearchPool = new Set();
+	toSearchPool.add(vectorFrom);
+	let target = null;
+	do {
+		let tempPool = [];
+		for (let vector of [...toSearchPool].filter((e) => !searchedPool.has(e))) {
+			searchedPool.add(vector);
+			if (vector == vectorTo) {
+				target = vector;
+				toSearchPool = new Set();
+				break;
+			} else {
+				tempPool = [
+					...tempPool,
+					...[...vector.adjs]
+						.filter((e) => {
+							return (
+								!searchedPool.has(e) && (!vector.searchedFrom ? true : !vector.searchedFrom.adjs.has(e))
+							);
+						})
+						.map((e) => {
+							if (!e.searchedFrom) {
+								e.searchedFrom = vector;
+							}
+							return e;
+						})
+				];
+			}
+		}
+		toSearchPool = new Set(tempPool);
+	} while (toSearchPool.size);
+	return target;
 }
 
 let A = new Vector("A"),
@@ -49,9 +66,9 @@ let A = new Vector("A"),
 	G = new Vector("G"),
 	H = new Vector("H"),
 	I = new Vector("I");
-A.addAdj(B);
-A.addAdj(C);
-A.addAdj(D);
+
+I.addAdj(C);
+E.addAdj(H);
 B.addAdj(E);
 B.addAdj(F);
 C.addAdj(D);
@@ -59,6 +76,14 @@ C.addAdj(G);
 D.addAdj(G);
 D.addAdj(H);
 E.addAdj(I);
-E.addAdj(H);
-I.addAdj(C);
-console.log(`the shortest path is: ${bfsShortest([B], H).join("-")}`);
+A.addAdj(B);
+A.addAdj(C);
+A.addAdj(D);
+let result = bfsShortest(E, G);
+let str = `${result.name}`;
+while (result.searchedFrom) {
+	result = result.searchedFrom;
+	str += `-${result.name}`;
+}
+
+console.log([...str].reverse().join(""));
