@@ -87,8 +87,8 @@ class MyPromise {
           return MyPromise.reject(err);
         }
       default:
-        onfulfilled && this.onfulfilledArr.push(onfulfilled);
-        onrejected && this.onrejectedArr.push(onrejected);
+        onfulfilled instanceof Function && this.onfulfilledArr.push(onfulfilled);
+        onrejected instanceof Function && this.onrejectedArr.push(onrejected);
         return this;
     }
   }
