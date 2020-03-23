@@ -79,7 +79,13 @@ class MyPromise {
           return MyPromise.reject(err);
         }
       case "rejected":
-        return MyPromise.reject(onrejected ? onrejected(this.rejectReason) || this.rejectReason : this.rejectReason);
+        let rej;
+        try {
+          rej = onrejected ? onrejected(this.rejectReason) || this.rejectReason : this.rejectReason;
+          return MyPromise.reject(rej);
+        } catch (err) {
+          return MyPromise.reject(err);
+        }
       default:
         onfulfilled && this.onfulfilledArr.push(onfulfilled);
         onrejected && this.onrejectedArr.push(onrejected);
