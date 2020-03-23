@@ -55,13 +55,17 @@ class MyPromise {
   resolve(value) {
     this.status = "fulfilled";
     this.resolveValue = value;
-    this.onfulfilledArr.forEach(e => e && e.apply(null, [this.resolveValue]));
+    process.nextTice(()=>{
+      this.onfulfilledArr.forEach(e => e && e.apply(null, [this.resolveValue]));
+    });
   }
 
   reject(err) {
     this.status = "rejected";
     this.rejectReason = err;
-    this.onrejectedArr.forEach(e => e && e.apply(null, [this.rejectReason]));
+    process.nextTice(()=>{
+      this.onrejectedArr.forEach(e => e && e.apply(null, [this.rejectReason]));
+    });
   }
 
   then(onfulfilled, onrejected) {
